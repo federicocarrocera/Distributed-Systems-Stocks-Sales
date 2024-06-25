@@ -1,0 +1,60 @@
+version: '3.6'
+services:
+  eurekaserver:
+    build: eurekaserver
+    networks:
+      - MarketNetwork
+    ports:
+      - "8761:8761"
+    container_name: eurekaserver
+  
+  dataservice:
+    build: dataservice
+    container_name: dataservice
+    networks:
+      - MarketNetwork
+    depends_on:
+      - eurekaserver
+    restart: unless-stopped
+  
+  stockandnewsservice:
+    build: stockandnewsservice
+    container_name: stockandnewsservice
+    networks:
+      - MarketNetwork
+    depends_on:
+      - eurekaserver
+    restart: unless-stopped
+    
+  userservice:
+    build: userservice
+    container_name: userservice
+    networks:
+      - MarketNetwork
+    depends_on:
+      - eurekaserver
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+  
+  managementservice:
+    build: managementservice
+    container_name: managementservice
+    networks:
+      - MarketNetwork
+    depends_on:
+      - eurekaserver
+    restart: unless-stopped
+
+  advertisementservice:
+    build: advertisementservice
+    container_name: advertisementservice
+    networks:
+      - MarketNetwork
+    depends_on:
+      - eurekaserver
+    restart: unless-stopped
+
+networks:
+  MarketNetwork:
+    name: MarketNetwork
